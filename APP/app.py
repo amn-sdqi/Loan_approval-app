@@ -11,15 +11,17 @@ st.write(f"Current working directory: {cwd}")
 st.write("Files in directory:", os.listdir(cwd))
 
 # Define correct path to the model file
-model_path = os.path.join(cwd, "loan_pred.pkl")
+model_path = os.path.join(cwd, "loan_pred.joblib")
 st.write(f"Looking for model at: {model_path}")
 
 if not os.path.exists(model_path):
     st.error(f"Model file '{model_path}' not found. Please upload it.")
 else:
-    with open(model_path, "rb") as file1:
-        model = pickle.load(file1)
+    model = joblib.load("../models/loan_pred.joblib")
     st.success("Model loaded successfully!")
+# Load models and encoders
+
+
 emp_title_enc = joblib.load("../models/emp_title_enc.joblib")
 
 

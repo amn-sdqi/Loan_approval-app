@@ -4,13 +4,13 @@ import re
 import pandas as pd
 
 # Load models and encoders
-model = joblib.load("Loan Tap/models/loan_pred.joblib")
+model = joblib.load("../models/loan_pred.joblib")
 st.success("Model loaded successfully!")
 
-emp_title_enc = joblib.load("Loan Tap/models/emp_title_enc.joblib")
+emp_title_enc = joblib.load("../models/emp_title_enc.joblib")
 
 
-title_enc = joblib.load("Loan Tap/models/title_enc.joblib")
+title_enc = joblib.load("../models/title_enc.joblib")
 
 # Define mappings
 grade_mapping = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5, "F": 6, "G": 7}
@@ -253,6 +253,8 @@ if submitted:
     # Making prediction
     result = model.predict(encoded_data)
     
-    Status= "Your Loan has been Approved" if result==1 else "Sorry Our System has suggested you for rejection"
+    if result==1:
+        st.success("Your Loan has been Approved")        
+    else:
+        st.error("Sorry Our System has suggested you for rejection")
     
-    st.write(Status)

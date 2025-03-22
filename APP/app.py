@@ -21,11 +21,11 @@ else:
     st.success("Model loaded successfully!")
 # Load models and encoders
 
+emp_title_enc_path = os.path.join(cwd, "emp_title_enc.joblib")
+emp_title_enc = joblib.load(emp_title_enc_path)
 
-emp_title_enc = joblib.load("../models/emp_title_enc.joblib")
-
-
-title_enc = joblib.load("../models/title_enc.joblib")
+title_enc_path = os.path.join(cwd, "title_enc.joblib")
+title_enc = joblib.load(title_enc_path)
 
 # Define mappings
 grade_mapping = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5, "F": 6, "G": 7}

@@ -14,8 +14,8 @@ model = joblib.load(model_path)
 
 
 
-emp_title_enc_path = os.path.join(cwd, "emp_title_enc.joblib")
-emp_title_enc = joblib.load(emp_title_enc_path)
+# emp_title_enc_path = 
+emp_title_enc = joblib.load(os.path.join(cwd, "emp_title_enc.joblib"))
 
 title_enc_path = os.path.join(cwd, "title_enc.joblib")
 title_enc = joblib.load(title_enc_path)

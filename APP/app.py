@@ -7,11 +7,19 @@ import os
 # Get and print the current working directory
 cwd = os.getcwd()
 st.write(f"Current working directory: {cwd}")
+# Print all files in the directory (debugging)
+st.write("Files in directory:", os.listdir(cwd))
 
-# Load models and encoders
-model = joblib.load("../models/loan_pred.joblib")
-st.success("Model loaded successfully!")
+# Define correct path to the model file
+model_path = os.path.join(cwd, "loan_pred.pkl")
+st.write(f"Looking for model at: {model_path}")
 
+if not os.path.exists(model_path):
+    st.error(f"Model file '{model_path}' not found. Please upload it.")
+else:
+    with open(model_path, "rb") as file1:
+        model = pickle.load(file1)
+    st.success("Model loaded successfully!")
 emp_title_enc = joblib.load("../models/emp_title_enc.joblib")
 
 

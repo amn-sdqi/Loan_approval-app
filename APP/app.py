@@ -2,6 +2,11 @@ import streamlit as st
 import joblib
 import re
 import pandas as pd
+import os
+
+# Get and print the current working directory
+cwd = os.getcwd()
+st.write(f"Current working directory: {cwd}")
 
 # Load models and encoders
 model = joblib.load("../models/loan_pred.joblib")

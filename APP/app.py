@@ -6,20 +6,13 @@ import os
 
 # Get and print the current working directory
 cwd = os.getcwd()
-st.write(f"Current working directory: {cwd}")
-# Print all files in the directory (debugging)
-st.write("Files in directory:", os.listdir(cwd))
 
 # Define correct path to the model file
-model_path = os.path.join(cwd, "loan_pred.joblib")
-st.write(f"Looking for model at: {model_path}")
-
-if not os.path.exists(model_path):
-    st.error(f"Model file '{model_path}' not found. Please upload it.")
-else:
-    model = joblib.load(model_path)
-    st.success("Model loaded successfully!")
 # Load models and encoders
+model_path = os.path.join(cwd, "loan_pred.joblib")
+model = joblib.load(model_path)
+
+
 
 emp_title_enc_path = os.path.join(cwd, "emp_title_enc.joblib")
 emp_title_enc = joblib.load(emp_title_enc_path)
@@ -263,13 +256,12 @@ if submitted:
 
     # Encode categorical features
     encoded_data = encoding(dataframe)
-    
+
     # st.write(encoded_data)
     # Making prediction
     result = model.predict(encoded_data)
-    
-    if result==1:
-        st.success("Your Loan has been Approved")        
+
+    if result == 1:
+        st.success("Your Loan has been Approved")
     else:
         st.error("Sorry Our System has suggested you for rejection")
-    

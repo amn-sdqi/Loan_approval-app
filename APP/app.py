@@ -17,7 +17,7 @@ st.write(f"Looking for model at: {model_path}")
 if not os.path.exists(model_path):
     st.error(f"Model file '{model_path}' not found. Please upload it.")
 else:
-    model = joblib.load("../models/loan_pred.joblib")
+    model = joblib.load(model_path)
     st.success("Model loaded successfully!")
 # Load models and encoders
 

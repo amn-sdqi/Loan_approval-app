@@ -172,7 +172,7 @@ if submitted:
     # Convert form inputs to JSON
     data = {
         "loan_amnt": loan_amnt,
-        "term":0 if term == "36 months" else 1,
+        "term":term,
         "int_rate": int_rate,
         "installment": installment,
         "grade": grade,
@@ -210,7 +210,8 @@ if submitted:
 
     # Encode categorical features
     encoded_data = encoding(dataframe)  # Assume encoding function is handled elsewhere
-
+    
+    # st.write(encoded_data)
     # Making prediction
     result = model.predict(encoded_data)
 

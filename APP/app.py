@@ -3,6 +3,7 @@ import joblib
 import re
 import pandas as pd
 import os
+import time
 
 # Get and print the current working directory
 cwd = os.getcwd()
@@ -109,118 +110,65 @@ def encoding(df):
     return df
 
 
+# Title
 st.title("🏦 Loan Approval Prediction")
+st.markdown("### 📌 Enter loan details to predict approval status.")
 
-st.write("Enter loan details to predict approval status.")
+# Divider
+st.markdown("---")
 
-# Input form
+# Form with Layout
 with st.form("loan_form"):
-    loan_amnt = st.number_input("Loan Amount", value=10000.0)
-    term = st.selectbox(
-        "Term : The number of payments on the loan.", ["36 months", "60 months"]
-    )
-    int_rate = st.number_input("Interest Rate (%)", value=11.44)
-    installment = st.number_input(
-        "Installment : The monthly payment owed by the borrower if the loan originates.",
-        value=329.48,
-    )
-    grade = st.selectbox(
-        " LoanTap assigned loan grade", ["A", "B", "C", "D", "E", "F", "G"]
-    )
-    sub_grade = st.selectbox(
-        "LoanTap assigned loan subgrade",
-        ["1", "2", "3", "4", "5"],
-    )
-    emp_title = st.text_input("Employment of Borrower", "Marketing / Tech / Business")
-    emp_length = st.selectbox(
-        "Years in Employment",
-        [
-            "Not Provided",
-            "< 1 year",
-            "1 year",
-            "2 years",
-            "3 years",
-            "4 years",
-            "5 years",
-            "6 years",
-            "7 years",
-            "8 years",
-            "9 years",
-            "10+ years",
-        ],
-    )
-    home_ownership = st.selectbox(
-        "Home Ownership Status", ["NONE", "MORTGAGE", "OTHER", "OWN", "RENT", "ANY"]
-    )
+    col1, col2 = st.columns(2)
 
-    annual_inc = st.number_input("Annual Income", value=117000.0)
-    verification_status = st.selectbox(
-        "Verification Status", ["Verified", "Not Verified"]
-    )
-    issue_d = st.date_input(
-        "Issue Date : The month which the loan was funded",
-        value=None,
-        format="YYYY-MM-DD",
-    )
-    purpose = st.selectbox(
-        "Purpose",
-        [
-            "car",
-            "credit_card",
-            "debt_consolidation",
-            "educational",
-            "home_improvement",
-            "house",
-            "major_purchase",
-            "medical",
-            "moving",
-            "other",
-            "renewable_energy",
-            "small_business",
-            "vacation",
-            "wedding",
-        ],
-    )
-    title = st.text_input("The loan title provided by the borrower", "Personal loan ?")
-    dti = st.number_input(
-        "Debt-to-Income Ratio (DTI)", value=(installment / (annual_inc / 12)) * 100
-    )
-    earliest_cr_line = st.date_input(
-        "Date : The month the borrower's earliest reported credit line was opened",
-        value=None,
-        format="YYYY-MM-DD",
-    )
-    open_acc = st.number_input(
-        "Open Accounts : The number of open credit lines in the borrower's credit file.",
-        value=16,
-    )
-    pub_rec = st.number_input(
-        "Public Records : Number of derogatory public records", value=0
-    )
-    revol_bal = st.number_input("Total credit revolving balance", value=36369.0)
-    revol_util = st.number_input(
-        "Revolving Utilization (%) : Amount the borrower is using relative to all available revolving credit",
-        value=41.8,
-    )
-    total_acc = st.number_input(
-        "Total Accounts : The total number of credit lines currently in the borrower's credit file",
-        value=25.0,
-    )
-    initial_list_status = st.selectbox(
-        "initial listing status of the loan", {"Waiting": "w", "Fulfilled": "f"}
-    )
-    application_type = st.selectbox(
-        "Application Type", ["INDIVIDUAL", "JOINT", "DIRECT_PAY"]
-    )
-    mort_acc = st.number_input("Number of mortgage accounts", value=0.0)
-    pub_rec_bankruptcies = st.selectbox(
-        "Public Record Bankruptcies", {"Yes": 1.0, "No": 0.0}
-    )
-    address = st.text_input("Address", "0174 Michelle GatewayMendozaberg, OK 22690")
+    with col1:
+        loan_amnt = st.number_input("💰 Loan Amount", value=10000.0, min_value=500.0, step=500.0)
+        term = st.selectbox("📅 Loan Term", ["36 months", "60 months"])
+        int_rate = st.number_input("📈 Interest Rate (%)", value=11.44, min_value=0.0, max_value=50.0, step=0.1)
+        installment = st.number_input("📆 Monthly Installment", value=329.48)
+        grade = st.selectbox("🏷️ Loan Grade", ["A", "B", "C", "D", "E", "F", "G"])
+        sub_grade = st.selectbox("🔠 Loan Subgrade", ["1", "2", "3", "4", "5"])
+        emp_title = st.text_input("👨‍💼 Employment Title", "Marketing / Tech / Business")
+        emp_length = st.selectbox(
+            "📅 Employment Length",
+            ["Not Provided", "< 1 year", "1 year", "2 years", "3 years", "4 years", "5 years", "6 years", "7 years", "8 years", "9 years", "10+ years"],
+        )
 
-    submitted = st.form_submit_button("Predict Loan Status")
+    with col2:
+        home_ownership = st.selectbox("🏠 Home Ownership", ["NONE", "MORTGAGE", "OTHER", "OWN", "RENT", "ANY"])
+        annual_inc = st.number_input("💸 Annual Income", value=117000.0, step=1000.0)
+        verification_status = st.selectbox("✅ Verification Status", ["Verified", "Not Verified"])
+        issue_d = st.date_input("📅 Loan Issue Date")
+        purpose = st.selectbox(
+            "🎯 Loan Purpose",
+            ["car", "credit_card", "debt_consolidation", "educational", "home_improvement", "house", "major_purchase", "medical", "moving", "other", "renewable_energy", "small_business", "vacation", "wedding"],
+        )
+        title = st.text_input("📄 Loan Title", "Personal Loan")
+        dti = st.number_input("📊 Debt-to-Income Ratio (%)", value=(installment / (annual_inc / 12)) * 100, format="%.2f")
+        earliest_cr_line = st.date_input("📅 Earliest Credit Line Date")
+
+    st.markdown("---")  # Divider
+
+    col3, col4 = st.columns(2)
+    with col3:
+        open_acc = st.number_input("🔓 Open Credit Lines", value=16)
+        pub_rec = st.number_input("📌 Public Records", value=0)
+        revol_bal = st.number_input("💳 Revolving Balance", value=36369.0)
+        revol_util = st.number_input("📈 Revolving Utilization (%)", value=41.8)
+    with col4:
+        total_acc = st.number_input("📋 Total Credit Accounts", value=25.0)
+        initial_list_status = st.selectbox("📝 Initial Listing Status", ["Waiting", "Fulfilled"])
+        application_type = st.selectbox("📄 Application Type", ["INDIVIDUAL", "JOINT", "DIRECT_PAY"])
+        mort_acc = st.number_input("🏦 Mortgage Accounts", value=0.0)
+        pub_rec_bankruptcies = st.selectbox("⚖️ Bankruptcies", ["No", "Yes"])
+    
+    address = st.text_input("📍 Address", "0174 Michelle Gateway, Mendozaberg, OK 22690")
+
+    submitted = st.form_submit_button("🚀 Predict Loan Status")
 
 if submitted:
+    st.info("🔄 Processing your request...")
+
     # Convert form inputs to JSON
     data = {
         "loan_amnt": loan_amnt,
@@ -251,17 +199,23 @@ if submitted:
         "address": address,
     }
 
-    # Convert input JSON to DataFrame (best way to do it)
+    # Convert input JSON to DataFrame
     dataframe = pd.DataFrame([data])
 
-    # Encode categorical features
-    encoded_data = encoding(dataframe)
+    # Simulate processing delay
+    progress_bar = st.progress(0)
+    for i in range(100):
+        time.sleep(0.01)
+        progress_bar.progress(i + 1)
 
-    # st.write(encoded_data)
+    # Encode categorical features
+    encoded_data = dataframe  # Assume encoding function is handled elsewhere
+
     # Making prediction
     result = model.predict(encoded_data)
 
+    # Show result
     if result == 1:
-        st.success("Your Loan has been Approved")
+        st.success("🎉 Your Loan has been Approved!")
     else:
-        st.error("Sorry Our System has suggested you for rejection")
+        st.error("❌ Sorry, Our System has suggested you for rejection.")

@@ -172,7 +172,7 @@ if submitted:
     # Convert form inputs to JSON
     data = {
         "loan_amnt": loan_amnt,
-        "term": term,
+        "term":0 if term == "36 months" else 1,
         "int_rate": int_rate,
         "installment": installment,
         "grade": grade,

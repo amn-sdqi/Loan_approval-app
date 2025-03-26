@@ -209,7 +209,7 @@ if submitted:
         progress_bar.progress(i + 1)
 
     # Encode categorical features
-    encoded_data = dataframe  # Assume encoding function is handled elsewhere
+    encoded_data = encoding(dataframe)  # Assume encoding function is handled elsewhere
 
     # Making prediction
     result = model.predict(encoded_data)
